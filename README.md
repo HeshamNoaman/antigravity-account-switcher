@@ -75,7 +75,30 @@ Both VS Code and the Antigravity Desktop app immediately pick up the restored se
 
 ---
 
-## 🛠 Global CLI Shortcut (Optional)
+## 🛠 Global Terminal Setup (Access `agy-switch` from Anywhere)
 
-To use `agy-switch` from any terminal prompt across Windows:
-Add this repository to your user `PATH`, or copy `agy-switch.cmd` into `~/.gemini/antigravity/bin/`.
+To run `agy-switch` from any CMD, PowerShell, or VS Code terminal prompt on your system:
+
+### Option A: One-Line PowerShell Command (Recommended)
+Run this once in PowerShell (does not require Administrator rights):
+```powershell
+$proj = "D:\github_project\antigravity-account-switcher"
+$userPath = [Environment]::GetEnvironmentVariable("PATH", "User")
+if ($userPath -split ";" -notcontains $proj) {
+    [Environment]::SetEnvironmentVariable("PATH", "$userPath;$proj", "User")
+    Write-Host "Successfully added to User PATH!" -ForegroundColor Green
+}
+```
+
+### Option B: Windows GUI
+1. Press <kbd>Win</kbd> + <kbd>R</kbd>, type `rundll32.exe sysdm.cpl,EditEnvironmentVariables` and press <kbd>Enter</kbd>.
+2. Under **User variables for <username>**, select the **Path** variable and click **Edit...**.
+3. Click **New** and paste the project directory path:
+   ```text
+   D:\github_project\antigravity-account-switcher
+   ```
+4. Click **OK** to save and close the dialogs.
+
+> [!IMPORTANT]
+> **Restart Terminal Windows:** Windows only loads updated environment variables into newly opened command prompts. If you have any CMD, PowerShell, or VS Code terminal windows currently open, close them and open a fresh terminal for the command to take effect.
+
