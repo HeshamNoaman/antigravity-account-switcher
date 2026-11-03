@@ -1,0 +1,15 @@
+# Ignore saved credentials and account profiles
+profiles/*
+!profiles/.gitkeep
+
+# Ignore Windows Credential & Token backups
+*.token
+*oauth_creds.json
+*google_accounts.json
+win_cred.json
+
+# System & Editor files
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
