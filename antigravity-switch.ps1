@@ -7,11 +7,13 @@
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet("list", "save", "use", "interactive", "delete")]
     [string]$Action = "interactive",
 
     [Parameter(Position = 1)]
-    [string]$ProfileName
+    [string]$ProfileName,
+
+    [Alias("h", "?")]
+    [switch]$Help
 )
 
 # Win32 Advapi32 Credential Manager definition
@@ -237,6 +239,36 @@ function List-Profiles {
     Write-Host ""
 }
 
+function Show-Help {
+    Write-Host "`n=== Antigravity Multi-Account Switcher ===" -ForegroundColor Cyan
+    Write-Host "Synchronizes Windows Credential Manager (gemini:antigravity) & ~/.gemini tokens.`n" -ForegroundColor Gray
+
+    Write-Host "USAGE:" -ForegroundColor Yellow
+    Write-Host "  agy-switch                                 Launch interactive menu"
+    Write-Host "  agy-switch list                            List saved accounts and show active session"
+    Write-Host "  agy-switch save <profile_name>             Snapshot currently logged-in account"
+    Write-Host "  agy-switch use <profile_name>              Switch to a saved profile immediately"
+    Write-Host "  agy-switch delete <profile_name>           Delete a saved profile"
+    Write-Host "  agy-switch help                            Show this help message`n"
+
+    Write-Host "HELP ALIASES:" -ForegroundColor Yellow
+    Write-Host "  agy-switch -h | --help | -? | /?`n"
+
+    Write-Host "EXAMPLES:" -ForegroundColor Yellow
+    Write-Host "  agy-switch save work                       Save active account as 'work'"
+    Write-Host "  agy-switch save personal                   Save active account as 'personal'"
+    Write-Host "  agy-switch use work                        Switch to 'work' profile"
+    Write-Host "  agy-switch delete old_acc                  Remove 'old_acc' profile`n"
+
+    Write-Host "STORAGE LOCATION:" -ForegroundColor Yellow
+    Write-Host "  $ProfilesDir`n"
+}
+
+if ($Help -or $Action.ToLower() -in @("help", "-help", "--help", "-h", "-?", "/?", "?")) {
+    Show-Help
+    return
+}
+
 switch ($Action.ToLower()) {
     "list" { List-Profiles }
     "save" { Save-Profile $ProfileName }
@@ -249,8 +281,9 @@ switch ($Action.ToLower()) {
             Write-Host "1) Switch account"
             Write-Host "2) Save current account as new profile"
             Write-Host "3) Delete a saved profile"
-            Write-Host "4) Exit"
-            $choice = Read-Host "`nChoose an option [1-4]"
+            Write-Host "4) View help & usage guide"
+            Write-Host "5) Exit"
+            $choice = Read-Host "`nChoose an option [1-5]"
             switch ($choice) {
                 "1" {
                     $name = Read-Host "Enter profile name to switch to"
@@ -269,9 +302,17 @@ switch ($Action.ToLower()) {
                     Delete-Profile $name
                     Read-Host "`nPress Enter to continue..."
                 }
-                "4" { return }
+                "4" {
+                    Show-Help
+                    Read-Host "`nPress Enter to continue..."
+                }
+                "5" { return }
                 default { }
             }
         }
+    }
+    default {
+        Write-Host "`n[ERROR] Unknown command: '$Action'" -ForegroundColor Red
+        Write-Host "Run 'agy-switch help' to see all available commands.`n" -ForegroundColor Yellow
     }
 }

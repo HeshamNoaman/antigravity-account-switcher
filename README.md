@@ -30,10 +30,12 @@ switch.bat
 
 | Command | Action |
 | :--- | :--- |
-| `.\antigravity-switch.ps1 list` | List all saved accounts and show which is currently active |
-| `.\antigravity-switch.ps1 save <profile_name>` | Snapshot the currently logged-in account |
-| `.\antigravity-switch.ps1 use <profile_name>` | Switch immediately to the specified account |
-| `.\antigravity-switch.ps1 delete <profile_name>` | Delete a saved profile |
+| `agy-switch` (or `.\antigravity-switch.ps1`) | Open the interactive menu |
+| `agy-switch list` | List all saved accounts and show which is currently active |
+| `agy-switch save <profile_name>` | Snapshot the currently logged-in account |
+| `agy-switch use <profile_name>` | Switch immediately to the specified account |
+| `agy-switch delete <profile_name>` | Delete a saved profile |
+| `agy-switch help` (or `-h`, `--help`, `/?`) | Display full usage instructions and examples |
 
 ---
 
